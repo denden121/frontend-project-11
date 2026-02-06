@@ -9,6 +9,10 @@
     "preview": "vite preview",
     "lint": "eslint ."
   },
+  "dependencies": {
+    "on-change": "^5.0.1",
+    "yup": "^1.4.0"
+  },
   "devDependencies": {
     "vite": "^6.0.1",
     "bootstrap": "^5.3.3",

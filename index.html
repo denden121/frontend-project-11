@@ -10,22 +10,32 @@
       <h1 class="mb-4">RSS Агрегатор</h1>
       <form class="rss-form">
         <div class="row g-3 align-items-end">
-          <div class="col-md-8">
-            <label for="rss-url" class="form-label">RSS-поток</label>
+          <div class="col-md-8 col-lg-9">
+            <label for="url-input" class="form-label">RSS-поток</label>
             <input
+              id="url-input"
+              autofocus
               type="text"
-              class="form-control"
-              id="rss-url"
-              name="url"
-              placeholder="https://example.com/feed"
               required
-              autocomplete="url"
+              name="url"
+              aria-label="url"
+              class="form-control w-100"
+              placeholder="ссылка RSS"
+              autocomplete="off"
             />
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 col-lg-3 d-flex align-items-end">
             <button type="submit" class="btn btn-primary w-100">
               Добавить
             </button>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-8 col-lg-9">
+            <div class="form-text">
+              Введите корректный URL RSS-ленты, например: https://example.com/feed
+            </div>
+            <div class="invalid-feedback rss-feedback"></div>
           </div>
         </div>
       </form>
