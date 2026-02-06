@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RSS Агрегатор</title>
+  </head>
+  <body>
+    <div class="container py-4">
+      <h1 class="mb-4">RSS Агрегатор</h1>
+      <form class="rss-form">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-8">
+            <label for="rss-url" class="form-label">RSS-поток</label>
+            <input
+              type="text"
+              class="form-control"
+              id="rss-url"
+              name="url"
+              placeholder="https://example.com/feed"
+              required
+              autocomplete="url"
+            />
+          </div>
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">
+              Добавить
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
