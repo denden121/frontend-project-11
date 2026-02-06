@@ -1,15 +1,12 @@
 import onChange from 'on-change';
+import i18next from 'i18next';
 
-const getErrorMessage = (error) => {
-  if (!error) {
+const getErrorMessage = (errorKey) => {
+  if (!errorKey) {
     return '';
   }
 
-  if (error.message) {
-    return error.message;
-  }
-
-  return 'Ошибка валидации';
+  return i18next.t(errorKey);
 };
 
 const renderFormState = (elements, state) => {
