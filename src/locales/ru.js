@@ -9,6 +9,7 @@ const resources = {
       label: 'RSS-поток',
       placeholder: 'ссылка RSS',
       button: 'Добавить',
+      buttonLoading: 'Загрузка…',
       help: 'Введите корректный URL RSS-ленты, например: https://example.com/feed',
       hint: 'Ссылка должна вести на RSS или Atom ленту (часто заканчивается на .rss, .xml или содержит /feed/). Обычная страница сайта не подойдёт.',
     },

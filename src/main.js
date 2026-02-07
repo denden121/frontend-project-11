@@ -86,7 +86,7 @@ const updateLangButtons = () => {
   });
 };
 
-const applyTranslations = () => {
+const applyTranslations = (watchedState) => {
   const {
     title,
     label,
@@ -116,7 +116,8 @@ const applyTranslations = () => {
   }
 
   if (submit) {
-    submit.textContent = i18next.t('form.button');
+    const isLoading = watchedState && watchedState.form.status === 'loading';
+    submit.textContent = isLoading ? i18next.t('form.buttonLoading') : i18next.t('form.button');
   }
 
   if (elements.feedsTitle) {
@@ -139,7 +140,7 @@ const runApp = () => {
 
   const langButtons = document.querySelectorAll(LANG_BUTTON_SELECTOR);
 
-  applyTranslations();
+  applyTranslations(watchedState);
 
   langButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -147,7 +148,7 @@ const runApp = () => {
 
       i18next.changeLanguage(lang)
         .then(() => {
-          applyTranslations();
+          applyTranslations(watchedState);
           setLangInUrl(lang);
         });
     });

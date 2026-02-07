@@ -18,8 +18,15 @@ const renderFormState = (elements, state) => {
   }
 
   const isLoading = form.status === 'loading';
+
   if (submit) {
     submit.disabled = isLoading;
+    submit.textContent = isLoading ? i18next.t('form.buttonLoading') : i18next.t('form.button');
+  }
+
+  if (input) {
+    input.readOnly = isLoading;
+    input.classList.toggle('is-loading', isLoading);
   }
 
   if (form.status === 'error') {

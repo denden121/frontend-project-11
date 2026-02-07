@@ -3,3 +3,8 @@
 body {
   min-height: 100vh;
 }
+
+.form-control.is-loading {
+  opacity: 0.85;
+  background-color: var(--bs-secondary-bg);
+}

@@ -9,6 +9,7 @@ const resources = {
       label: 'RSS feed',
       placeholder: 'RSS link',
       button: 'Add',
+      buttonLoading: 'Loading…',
       help: 'Enter a valid RSS URL, for example: https://example.com/feed',
       hint: 'The link must point to an RSS or Atom feed (often ends with .rss, .xml or contains /feed/). A regular webpage will not work.',
     },
