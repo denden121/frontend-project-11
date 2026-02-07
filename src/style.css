@@ -30,3 +30,22 @@ body {
     transform: translateX(0);
   }
 }
+
+#postModal.show {
+  display: block !important;
+}
+
+#postModalBackdrop.show {
+  display: block !important;
+}
+
+#postModal .modal-dialog {
+  min-height: 80vh;
+  max-height: 90vh;
+}
+
+#postModal .modal-body {
+  min-height: 60vh;
+  max-height: 70vh;
+  overflow-y: auto;
+}

@@ -45,6 +45,7 @@ const parseRss2Channel = (channel) => {
   const items = Array.from(itemEls).map((item) => ({
     title: getText(item, 'title') || getText(item, 'description') || '',
     link: getLinkFromItem(item),
+    description: getText(item, 'description') || getText(item, 'content:encoded') || '',
   }));
 
   return {
@@ -69,7 +70,9 @@ const parseAtomFeed = (feedEl) => {
     const link = linkEl ? linkEl.getAttribute('href') : '';
     const titleNode = entry.querySelector('title');
     const itemTitle = titleNode ? titleNode.textContent.trim() : '';
-    return { title: itemTitle, link };
+    const summaryEl = entry.querySelector('summary, content');
+    const description = summaryEl ? summaryEl.textContent.trim() : '';
+    return { title: itemTitle, link, description };
   });
 
   return {

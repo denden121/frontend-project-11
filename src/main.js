@@ -26,6 +26,11 @@ const elements = {
   postsList: document.querySelector('.rss-posts-list'),
   feedsTitle: document.querySelector('.rss-feeds-title'),
   postsTitle: document.querySelector('.rss-posts-title'),
+  postModal: document.getElementById('postModal'),
+  postModalTitle: document.getElementById('postModalTitle'),
+  postModalBody: document.getElementById('postModalBody'),
+  postModalBackdrop: document.getElementById('postModalBackdrop'),
+  postModalFooterClose: document.getElementById('postModalFooterClose'),
 };
 
 const state = {
@@ -35,6 +40,7 @@ const state = {
   },
   feeds: [],
   posts: [],
+  readPostIds: [],
 };
 
 const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -91,6 +97,7 @@ const checkFeedForNewPosts = (watchedState, feed) => {
           feedId: feed.id,
           title: item.title,
           link: item.link,
+          description: item.description || '',
         });
       });
 
@@ -134,6 +141,34 @@ const setLangInUrl = (lang) => {
   const url = new URL(window.location.href);
   url.searchParams.set(LANG_QUERY_PARAM, lang);
   window.history.replaceState({}, '', url);
+};
+
+const showPostModal = (post, elements) => {
+  if (!elements.postModal || !elements.postModalTitle || !elements.postModalBody || !elements.postModalBackdrop) {
+    return;
+  }
+  elements.postModalTitle.textContent = post.title || '';
+  elements.postModalBody.textContent = post.description
+    ? post.description.replace(/<[^>]+>/g, ' ').trim()
+    : '';
+  elements.postModal.classList.add('show');
+  elements.postModal.style.display = 'block';
+  elements.postModal.setAttribute('aria-hidden', 'false');
+  elements.postModalBackdrop.classList.add('show');
+  elements.postModalBackdrop.style.display = 'block';
+  document.body.classList.add('modal-open');
+};
+
+const hidePostModal = (elements) => {
+  if (!elements.postModal || !elements.postModalBackdrop) {
+    return;
+  }
+  elements.postModal.classList.remove('show');
+  elements.postModal.style.display = 'none';
+  elements.postModal.setAttribute('aria-hidden', 'true');
+  elements.postModalBackdrop.classList.remove('show');
+  elements.postModalBackdrop.style.display = 'none';
+  document.body.classList.remove('modal-open');
 };
 
 const updateLangButtons = () => {
@@ -188,6 +223,9 @@ const applyTranslations = (watchedState) => {
   }
   if (elements.postsTitle) {
     elements.postsTitle.textContent = i18next.t('postsTitle');
+  }
+  if (elements.postModalFooterClose) {
+    elements.postModalFooterClose.textContent = i18next.t('modal.close');
   }
 
   updateLangButtons();
@@ -251,6 +289,7 @@ const runApp = () => {
             feedId,
             title: item.title,
             link: item.link,
+            description: item.description || '',
           });
         });
 
@@ -264,6 +303,23 @@ const runApp = () => {
         }
         watchedState.form.status = 'error';
       });
+  });
+
+  if (elements.postsList) {
+    elements.postsList.addEventListener('click', (e) => {
+      const btn = e.target.closest('.post-preview-btn');
+      if (!btn) return;
+      const postId = btn.dataset.postId;
+      const post = watchedState.posts.find((p) => p.id === postId);
+      if (post) {
+        showPostModal(post, elements);
+        watchedState.readPostIds.push(postId);
+      }
+    });
+  }
+
+  document.querySelectorAll('.post-modal-close').forEach((el) => {
+    el.addEventListener('click', () => hidePostModal(elements));
   });
 
   scheduleUpdates(watchedState);

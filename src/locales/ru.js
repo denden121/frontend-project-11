@@ -24,6 +24,12 @@ const resources = {
     toast: {
       feedUpdateError: 'Не удалось обновить ленту: {{title}}',
     },
+    post: {
+      preview: 'Просмотр',
+    },
+    modal: {
+      close: 'Закрыть',
+    },
   },
 };
 

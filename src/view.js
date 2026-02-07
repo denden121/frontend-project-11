@@ -27,6 +27,9 @@ const renderFormState = (elements, state) => {
   if (input) {
     input.readOnly = isLoading;
     input.classList.toggle('is-loading', isLoading);
+    if (!isLoading) {
+      input.removeAttribute('readonly');
+    }
   }
 
   if (form.status === 'error') {
@@ -70,10 +73,12 @@ const renderFeeds = (container, feeds) => {
   cards.forEach((el) => container.appendChild(el));
 };
 
-const renderPosts = (container, posts) => {
+const renderPosts = (container, posts, readPostIds = []) => {
   if (!container) {
     return;
   }
+
+  const readSet = new Set(readPostIds);
 
   if (posts.length === 0) {
     const li = document.createElement('li');
@@ -86,13 +91,23 @@ const renderPosts = (container, posts) => {
 
   const items = posts.map((post) => {
     const li = document.createElement('li');
-    li.className = 'list-group-item';
+    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+    const wrap = document.createElement('div');
+    wrap.className = 'flex-grow-1 me-2';
     const a = document.createElement('a');
     a.href = post.link;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
+    a.className = readSet.has(post.id) ? 'fw-normal' : 'fw-bold';
     a.textContent = post.title || post.link;
-    li.appendChild(a);
+    wrap.appendChild(a);
+    li.appendChild(wrap);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-outline-primary btn-sm post-preview-btn';
+    btn.dataset.postId = post.id;
+    btn.textContent = i18next.t('post.preview');
+    li.appendChild(btn);
     return li;
   });
 
@@ -112,7 +127,7 @@ const escapeHtml = (str) => {
 const initView = (state, elements) => {
   renderFormState(elements, state);
   renderFeeds(elements.feedsList, state.feeds);
-  renderPosts(elements.postsList, state.posts);
+  renderPosts(elements.postsList, state.posts, state.readPostIds);
 
   return onChange(
     state,
@@ -123,8 +138,8 @@ const initView = (state, elements) => {
       if (path === 'feeds' || path.startsWith('feeds.')) {
         renderFeeds(elements.feedsList, state.feeds);
       }
-      if (path === 'posts' || path.startsWith('posts.')) {
-        renderPosts(elements.postsList, state.posts);
+      if (path === 'posts' || path.startsWith('posts.') || path === 'readPostIds' || path.startsWith('readPostIds.')) {
+        renderPosts(elements.postsList, state.posts, state.readPostIds);
       }
     },
   );
