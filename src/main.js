@@ -11,6 +11,7 @@ const DEFAULT_LANG = 'ru';
 const SUPPORTED_LANGS = ['ru', 'en'];
 const LANG_QUERY_PARAM = 'lang';
 const LANG_BUTTON_SELECTOR = '[data-lang]';
+const UPDATE_INTERVAL_MS = 5000;
 
 const elements = {
   form: document.querySelector('.rss-form'),
@@ -55,6 +56,68 @@ const buildSchema = (urls) => yup
   .notOneOf(urls);
 
 const validateUrl = (url, urls) => buildSchema(urls).validate(url);
+
+const getExistingPostLinksForFeed = (posts, feedId) => {
+  return new Set(posts.filter((p) => p.feedId === feedId).map((p) => p.link));
+};
+
+const TOAST_AUTO_HIDE_MS = 5000;
+
+const showToast = (message, type = 'danger') => {
+  const container = document.querySelector('.toast-container');
+  if (!container) {
+    return;
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast-notification alert alert-${type} shadow-sm mb-2`;
+  toast.setAttribute('role', 'alert');
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('toast-notification-hide');
+    setTimeout(() => toast.remove(), 300);
+  }, TOAST_AUTO_HIDE_MS);
+};
+
+const checkFeedForNewPosts = (watchedState, feed) => {
+  return fetchFeed(feed.url)
+    .then((xmlString) => {
+      const { items } = parseRss(xmlString);
+      const existingLinks = getExistingPostLinksForFeed(watchedState.posts, feed.id);
+      const newItems = items.filter((item) => item.link && !existingLinks.has(item.link));
+      newItems.forEach((item) => {
+        watchedState.posts.push({
+          id: generateId(),
+          feedId: feed.id,
+          title: item.title,
+          link: item.link,
+        });
+      });
+
+    })
+    .catch(() => {
+      const title = feed.title || feed.url;
+      showToast(i18next.t('toast.feedUpdateError', { title }), 'danger');
+    });
+};
+
+const checkAllFeeds = (watchedState) => {
+  if (watchedState.feeds.length === 0) {
+    return Promise.resolve();
+  }
+  return Promise.all(
+    watchedState.feeds.map((feed) => checkFeedForNewPosts(watchedState, feed)),
+  );
+};
+
+const scheduleUpdates = (watchedState) => {
+  const run = () => {
+    checkAllFeeds(watchedState).finally(() => {
+      setTimeout(run, UPDATE_INTERVAL_MS);
+    });
+  };
+  setTimeout(run, UPDATE_INTERVAL_MS);
+};
 
 const getInitialLanguage = () => {
   const params = new URLSearchParams(window.location.search);
@@ -202,6 +265,8 @@ const runApp = () => {
         watchedState.form.status = 'error';
       });
   });
+
+  scheduleUpdates(watchedState);
 };
 
 i18next

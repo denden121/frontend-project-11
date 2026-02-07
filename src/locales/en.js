@@ -21,6 +21,9 @@ const resources = {
       parse: 'No RSS feed at this URL. Make sure the address points to a feed (RSS/Atom), not a regular page.',
       unknown: 'Something went wrong. Please try again.',
     },
+    toast: {
+      feedUpdateError: 'Failed to update feed: {{title}}',
+    },
   },
 };
 
