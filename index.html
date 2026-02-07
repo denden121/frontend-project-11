@@ -40,20 +40,17 @@
               placeholder="ссылка RSS"
               autocomplete="off"
             />
+            <div class="invalid-feedback rss-feedback"></div>
+            <div class="valid-feedback rss-success"></div>
+            <div class="form-text rss-help">
+              Введите корректный URL RSS-ленты, например: https://example.com/feed
+            </div>
+            <p class="form-text small text-muted mt-1 rss-hint"></p>
           </div>
           <div class="col-md-4 col-lg-3 d-flex align-items-end">
             <button type="submit" class="btn btn-primary w-100 rss-submit">
               Добавить
             </button>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-md-8 col-lg-9">
-            <div class="form-text rss-help">
-              Введите корректный URL RSS-ленты, например: https://example.com/feed
-            </div>
-            <p class="form-text small text-muted mt-1 rss-hint"></p>
-            <div class="invalid-feedback rss-feedback"></div>
           </div>
         </div>
       </form>

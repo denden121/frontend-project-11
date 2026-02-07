@@ -11,7 +11,7 @@ const getErrorMessage = (errorKey) => {
 
 const renderFormState = (elements, state) => {
   const { form } = state;
-  const { input, feedback, submit } = elements;
+  const { input, feedback, successFeedback, submit } = elements;
 
   if (!input || !feedback) {
     return;
@@ -33,8 +33,10 @@ const renderFormState = (elements, state) => {
   }
 
   if (form.status === 'error') {
+    input.classList.remove('is-valid');
     input.classList.add('is-invalid');
     feedback.textContent = getErrorMessage(form.error);
+    if (successFeedback) successFeedback.textContent = '';
     return;
   }
 
@@ -42,9 +44,15 @@ const renderFormState = (elements, state) => {
   feedback.textContent = '';
 
   if (form.status === 'success') {
+    input.classList.add('is-valid');
+    if (successFeedback) successFeedback.textContent = i18next.t('form.success');
     input.value = '';
     input.focus();
+    return;
   }
+
+  input.classList.remove('is-valid');
+  if (successFeedback) successFeedback.textContent = '';
 };
 
 const renderFeeds = (container, feeds) => {

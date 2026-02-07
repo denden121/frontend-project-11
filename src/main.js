@@ -17,6 +17,7 @@ const elements = {
   form: document.querySelector('.rss-form'),
   input: document.querySelector('#url-input'),
   feedback: document.querySelector('.rss-feedback'),
+  successFeedback: document.querySelector('.rss-success'),
   title: document.querySelector('.rss-title'),
   label: document.querySelector('.rss-label'),
   help: document.querySelector('.rss-help'),

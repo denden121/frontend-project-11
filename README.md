@@ -4,7 +4,7 @@
 
 ## Ссылка на сайт
 
-[Открыть приложение на Vercel](https://frontend-project-11-beta-two.vercel.app/) — замените ссылку после деплоя.
+[Открыть приложение на Vercel](https://frontend-project-11-beta-two.vercel.app/) 
 
 ## Локальный запуск
 
@@ -19,3 +19,4 @@ npm run dev
 
 [![Hexlet check](https://github.com/denden121/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/denden121/frontend-project-11/actions/workflows/hexlet-check.yml)
 [![Lint and Build](https://github.com/denden121/frontend-project-11/actions/workflows/lint-build.yml/badge.svg)](https://github.com/denden121/frontend-project-11/actions/workflows/lint-build.yml)
+[![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=denden121_frontend-project-11&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=denden121_frontend-project-11)
