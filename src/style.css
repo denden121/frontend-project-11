@@ -13,6 +13,10 @@ body {
   display: block;
 }
 
+.form-control.is-invalid ~ .rss-feedback.invalid-feedback {
+  display: block;
+}
+
 .toast-notification {
   min-width: 280px;
   animation: toast-in 0.25s ease-out;
