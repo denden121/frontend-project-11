@@ -52,10 +52,17 @@
             <div class="form-text rss-help">
               Введите корректный URL RSS-ленты, например: https://example.com/feed
             </div>
+            <p class="form-text small text-muted mt-1 rss-hint"></p>
             <div class="invalid-feedback rss-feedback"></div>
           </div>
         </div>
       </form>
+      <div class="mt-5">
+        <h2 class="mb-3 rss-feeds-title">Фиды</h2>
+        <div class="rss-feeds-list"></div>
+        <h2 class="mb-3 mt-4 rss-posts-title">Посты</h2>
+        <ul class="rss-posts-list list-group"></ul>
+      </div>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

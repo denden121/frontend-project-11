@@ -4,6 +4,8 @@ import i18next from 'i18next';
 import initView from './view.js';
 import ru from './locales/ru.js';
 import en from './locales/en.js';
+import parseRss from './parser.js';
+import fetchFeed from './api.js';
 
 const DEFAULT_LANG = 'ru';
 const SUPPORTED_LANGS = ['ru', 'en'];
@@ -17,7 +19,12 @@ const elements = {
   title: document.querySelector('.rss-title'),
   label: document.querySelector('.rss-label'),
   help: document.querySelector('.rss-help'),
+  hint: document.querySelector('.rss-hint'),
   submit: document.querySelector('.rss-submit'),
+  feedsList: document.querySelector('.rss-feeds-list'),
+  postsList: document.querySelector('.rss-posts-list'),
+  feedsTitle: document.querySelector('.rss-feeds-title'),
+  postsTitle: document.querySelector('.rss-posts-title'),
 };
 
 const state = {
@@ -26,7 +33,10 @@ const state = {
     error: null,
   },
   feeds: [],
+  posts: [],
 };
+
+const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
 yup.setLocale({
   mixed: {
@@ -101,8 +111,19 @@ const applyTranslations = () => {
     help.textContent = i18next.t('form.help');
   }
 
+  if (elements.hint) {
+    elements.hint.textContent = i18next.t('form.hint');
+  }
+
   if (submit) {
     submit.textContent = i18next.t('form.button');
+  }
+
+  if (elements.feedsTitle) {
+    elements.feedsTitle.textContent = i18next.t('feedsTitle');
+  }
+  if (elements.postsTitle) {
+    elements.postsTitle.textContent = i18next.t('postsTitle');
   }
 
   updateLangButtons();
@@ -145,11 +166,38 @@ const runApp = () => {
       watchedState.feeds.map((feed) => feed.url),
     )
       .then(() => {
-        watchedState.feeds.push({ url });
+        watchedState.form.status = 'loading';
+
+        return fetchFeed(url);
+      })
+      .then((xmlString) => {
+        const { feed, items } = parseRss(xmlString);
+        const feedId = generateId();
+
+        watchedState.feeds.push({
+          id: feedId,
+          url,
+          title: feed.title,
+          description: feed.description,
+        });
+
+        items.forEach((item) => {
+          watchedState.posts.push({
+            id: generateId(),
+            feedId,
+            title: item.title,
+            link: item.link,
+          });
+        });
+
         watchedState.form.status = 'success';
       })
       .catch((error) => {
-        watchedState.form.error = error.message || 'errors.unknown';
+        if (error.message === 'parse') {
+          watchedState.form.error = 'errors.parse';
+        } else {
+          watchedState.form.error = 'errors.network';
+        }
         watchedState.form.status = 'error';
       });
   });
