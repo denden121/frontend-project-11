@@ -9,6 +9,10 @@ body {
   background-color: var(--bs-secondary-bg);
 }
 
+.form-control.is-valid ~ .rss-success.valid-feedback {
+  display: block;
+}
+
 .toast-notification {
   min-width: 280px;
   animation: toast-in 0.25s ease-out;
