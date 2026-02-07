@@ -8,7 +8,7 @@ import parseRss from './parser.js';
 import fetchFeed from './api.js';
 
 const DEFAULT_LANG = 'ru';
-const SUPPORTED_LANGS = ['ru', 'en'];
+const SUPPORTED_LANGS = new Set(['ru', 'en']);
 const LANG_QUERY_PARAM = 'lang';
 const LANG_BUTTON_SELECTOR = '[data-lang]';
 const UPDATE_INTERVAL_MS = 5000;
@@ -128,10 +128,10 @@ const scheduleUpdates = (watchedState) => {
 };
 
 const getInitialLanguage = () => {
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(globalThis.location.search);
   const langFromUrl = params.get(LANG_QUERY_PARAM);
 
-  if (langFromUrl && SUPPORTED_LANGS.includes(langFromUrl)) {
+  if (langFromUrl && SUPPORTED_LANGS.has(langFromUrl)) {
     return langFromUrl;
   }
 
@@ -139,9 +139,9 @@ const getInitialLanguage = () => {
 };
 
 const setLangInUrl = (lang) => {
-  const url = new URL(window.location.href);
+  const url = new URL(globalThis.location.href);
   url.searchParams.set(LANG_QUERY_PARAM, lang);
-  window.history.replaceState({}, '', url);
+  globalThis.history.replaceState({}, '', url);
 };
 
 const showPostModal = (post, elements) => {
@@ -150,7 +150,7 @@ const showPostModal = (post, elements) => {
   }
   elements.postModalTitle.textContent = post.title || '';
   elements.postModalBody.textContent = post.description
-    ? post.description.replace(/<[^>]+>/g, ' ').trim()
+    ? post.description.replaceAll(/<[^>]+>/g, ' ').trim()
     : '';
   elements.postModal.classList.add('show');
   elements.postModal.style.display = 'block';
@@ -215,7 +215,7 @@ const applyTranslations = (watchedState) => {
   }
 
   if (submit) {
-    const isLoading = watchedState && watchedState.form.status === 'loading';
+    const isLoading = watchedState?.form?.status === 'loading';
     submit.textContent = isLoading ? i18next.t('form.buttonLoading') : i18next.t('form.button');
   }
 
