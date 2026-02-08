@@ -46,6 +46,18 @@ const state = {
 
 const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
+const stripHtml = (html) => {
+  let text = '';
+  let inTag = false;
+  for (let i = 0; i < html.length; i += 1) {
+    const ch = html[i];
+    if (ch === '<') inTag = true;
+    else if (ch === '>') inTag = false;
+    else if (!inTag) text += ch;
+  }
+  return text.replace(/\s+/g, ' ').trim();
+};
+
 yup.setLocale({
   mixed: {
     required: 'errors.required',
@@ -150,7 +162,7 @@ const showPostModal = (post, elements) => {
   }
   elements.postModalTitle.textContent = post.title || '';
   elements.postModalBody.textContent = post.description
-    ? post.description.replaceAll(/<[^>]+>/g, ' ').trim()
+    ? stripHtml(post.description)
     : '';
   elements.postModal.classList.add('show');
   elements.postModal.style.display = 'block';
