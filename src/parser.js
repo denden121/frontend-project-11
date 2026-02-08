@@ -42,7 +42,7 @@ const parseRss2Channel = (channel) => {
   }
 
   const itemEls = channel.querySelectorAll('item')
-  const items = Array.from(itemEls).map((item) => ({
+  const items = Array.from(itemEls).map(item => ({
     title: getText(item, 'title') || getText(item, 'description') || '',
     link: getLinkFromItem(item),
     description: getText(item, 'description') || getText(item, 'content:encoded') || '',

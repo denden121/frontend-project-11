@@ -69,7 +69,7 @@ yup.setLocale({
   },
 })
 
-const buildSchema = (urls) => yup
+const buildSchema = urls => yup
   .string()
   .required()
   .url()
@@ -78,7 +78,7 @@ const buildSchema = (urls) => yup
 const validateUrl = (url, urls) => buildSchema(urls).validate(url)
 
 const getExistingPostLinksForFeed = (posts, feedId) => {
-  return new Set(posts.filter((p) => p.feedId === feedId).map((p) => p.link))
+  return new Set(posts.filter(p => p.feedId === feedId).map(p => p.link))
 }
 
 const TOAST_AUTO_HIDE_MS = 5000
@@ -104,7 +104,7 @@ const checkFeedForNewPosts = (watchedState, feed) => {
     .then((xmlString) => {
       const { items } = parseRss(xmlString)
       const existingLinks = getExistingPostLinksForFeed(watchedState.posts, feed.id)
-      const newItems = items.filter((item) => item.link && !existingLinks.has(item.link))
+      const newItems = items.filter(item => item.link && !existingLinks.has(item.link))
       newItems.forEach((item) => {
         watchedState.posts.push({
           id: generateId(),
@@ -126,7 +126,7 @@ const checkAllFeeds = (watchedState) => {
     return Promise.resolve()
   }
   return Promise.all(
-    watchedState.feeds.map((feed) => checkFeedForNewPosts(watchedState, feed)),
+    watchedState.feeds.map(feed => checkFeedForNewPosts(watchedState, feed)),
   )
 }
 
@@ -277,7 +277,7 @@ const runApp = () => {
     watchedState.form.status = 'validating'
 
     const existingUrls = [
-      ...watchedState.feeds.map((feed) => feed.url),
+      ...watchedState.feeds.map(feed => feed.url),
       watchedState.form.pendingUrl,
     ].filter(Boolean)
 
@@ -335,7 +335,7 @@ const runApp = () => {
       const btn = e.target.closest('.post-preview-btn')
       if (!btn) return
       const postId = btn.dataset.postId
-      const post = watchedState.posts.find((p) => p.id === postId)
+      const post = watchedState.posts.find(p => p.id === postId)
       if (post) {
         showPostModal(post, elements)
         watchedState.readPostIds.push(postId)

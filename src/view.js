@@ -97,7 +97,7 @@ const renderFeeds = (container, feeds) => {
   })
 
   container.innerHTML = ''
-  cards.forEach((el) => container.appendChild(el))
+  cards.forEach(el => container.appendChild(el))
 }
 
 const renderPosts = (container, posts, readPostIds = []) => {
@@ -136,7 +136,7 @@ const renderPosts = (container, posts, readPostIds = []) => {
   })
 
   container.innerHTML = ''
-  items.forEach((el) => container.appendChild(el))
+  items.forEach(el => container.appendChild(el))
 }
 
 const escapeHtml = (str) => {

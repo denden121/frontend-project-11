@@ -8,7 +8,7 @@ const fetchFeed = (feedUrl) => {
   return axios.get(url, {
     timeout: 10000,
     responseType: 'json',
-  }).then((response) => response.data.contents)
+  }).then(response => response.data.contents)
 }
 
 export default fetchFeed
