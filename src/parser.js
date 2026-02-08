@@ -1,4 +1,4 @@
-const parseRss = xmlString => {
+const parseRss = (xmlString) => {
   const doc = new DOMParser().parseFromString(xmlString, 'text/xml')
   const parseError = doc.querySelector('parsererror')
 
@@ -7,7 +7,7 @@ const parseRss = xmlString => {
   }
 
   const channel = doc.querySelector('channel')
-  const feedEl = doc.querySelector('feed') 
+  const feedEl = doc.querySelector('feed')
 
   if (channel) {
     return parseRss2Channel(channel)
@@ -25,7 +25,7 @@ const getText = (el, tagName) => {
   return node ? node.textContent.trim() : ''
 }
 
-const getLinkFromItem = itemEl => {
+const getLinkFromItem = (itemEl) => {
   const linkEl = itemEl.querySelector('link')
   if (!linkEl) {
     return ''
@@ -33,7 +33,7 @@ const getLinkFromItem = itemEl => {
   return linkEl.getAttribute('href') || linkEl.textContent.trim()
 }
 
-const parseRss2Channel = channel => {
+const parseRss2Channel = (channel) => {
   const title = getText(channel, 'title')
   const description = getText(channel, 'description')
 
@@ -42,7 +42,7 @@ const parseRss2Channel = channel => {
   }
 
   const itemEls = channel.querySelectorAll('item')
-  const items = Array.from(itemEls).map(item => ({
+  const items = Array.from(itemEls).map((item) => ({
     title: getText(item, 'title') || getText(item, 'description') || '',
     link: getLinkFromItem(item),
     description: getText(item, 'description') || getText(item, 'content:encoded') || '',
@@ -54,7 +54,7 @@ const parseRss2Channel = channel => {
   }
 }
 
-const parseAtomFeed = feedEl => {
+const parseAtomFeed = (feedEl) => {
   const titleEl = feedEl.querySelector('title')
   const title = titleEl ? titleEl.textContent.trim() : ''
   const descEl = feedEl.querySelector('subtitle, summary, description')
@@ -65,7 +65,7 @@ const parseAtomFeed = feedEl => {
   }
 
   const entryEls = feedEl.querySelectorAll('entry')
-  const items = Array.from(entryEls).map(entry => {
+  const items = Array.from(entryEls).map((entry) => {
     const linkEl = entry.querySelector('link[href]')
     const link = linkEl ? linkEl.getAttribute('href') : ''
     const titleNode = entry.querySelector('title')

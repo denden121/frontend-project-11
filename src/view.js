@@ -1,7 +1,7 @@
 import onChange from 'on-change'
 import i18next from 'i18next'
 
-const getErrorMessage = errorKey => {
+const getErrorMessage = (errorKey) => {
   if (!errorKey) {
     return ''
   }
@@ -84,7 +84,7 @@ const renderFeeds = (container, feeds) => {
     return
   }
 
-  const cards = feeds.map(feed => {
+  const cards = feeds.map((feed) => {
     const card = document.createElement('div')
     card.className = 'card mb-3'
     card.innerHTML = `
@@ -97,7 +97,7 @@ const renderFeeds = (container, feeds) => {
   })
 
   container.innerHTML = ''
-  cards.forEach(el => container.appendChild(el))
+  cards.forEach((el) => container.appendChild(el))
 }
 
 const renderPosts = (container, posts, readPostIds = []) => {
@@ -116,7 +116,7 @@ const renderPosts = (container, posts, readPostIds = []) => {
     return
   }
 
-  const items = posts.map(post => {
+  const items = posts.map((post) => {
     const li = document.createElement('li')
     li.className = 'list-group-item d-flex justify-content-between align-items-center'
     const a = document.createElement('a')
@@ -136,10 +136,10 @@ const renderPosts = (container, posts, readPostIds = []) => {
   })
 
   container.innerHTML = ''
-  items.forEach(el => container.appendChild(el))
+  items.forEach((el) => container.appendChild(el))
 }
 
-const escapeHtml = str => {
+const escapeHtml = (str) => {
   if (!str) {
     return ''
   }
@@ -155,7 +155,7 @@ const initView = (state, elements) => {
 
   return onChange(
     state,
-    path => {
+    (path) => {
       if (path === 'form.status' || path === 'form.error') {
         renderFormState(elements, state)
       }

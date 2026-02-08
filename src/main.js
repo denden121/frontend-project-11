@@ -47,7 +47,7 @@ const state = {
 
 const generateId = () => crypto.randomUUID()
 
-const stripHtml = html => {
+const stripHtml = (html) => {
   let text = ''
   let inTag = false
   for (let i = 0; i < html.length; i += 1) {
@@ -69,7 +69,7 @@ yup.setLocale({
   },
 })
 
-const buildSchema = urls => yup
+const buildSchema = (urls) => yup
   .string()
   .required()
   .url()
@@ -78,7 +78,7 @@ const buildSchema = urls => yup
 const validateUrl = (url, urls) => buildSchema(urls).validate(url)
 
 const getExistingPostLinksForFeed = (posts, feedId) => {
-  return new Set(posts.filter(p => p.feedId === feedId).map(p => p.link))
+  return new Set(posts.filter((p) => p.feedId === feedId).map((p) => p.link))
 }
 
 const TOAST_AUTO_HIDE_MS = 5000
@@ -101,11 +101,11 @@ const showToast = (message, type = 'danger') => {
 
 const checkFeedForNewPosts = (watchedState, feed) => {
   return fetchFeed(feed.url)
-    .then(xmlString => {
+    .then((xmlString) => {
       const { items } = parseRss(xmlString)
       const existingLinks = getExistingPostLinksForFeed(watchedState.posts, feed.id)
-      const newItems = items.filter(item => item.link && !existingLinks.has(item.link))
-      newItems.forEach(item => {
+      const newItems = items.filter((item) => item.link && !existingLinks.has(item.link))
+      newItems.forEach((item) => {
         watchedState.posts.push({
           id: generateId(),
           feedId: feed.id,
@@ -121,16 +121,16 @@ const checkFeedForNewPosts = (watchedState, feed) => {
     })
 }
 
-const checkAllFeeds = watchedState => {
+const checkAllFeeds = (watchedState) => {
   if (watchedState.feeds.length === 0) {
     return Promise.resolve()
   }
   return Promise.all(
-    watchedState.feeds.map(feed => checkFeedForNewPosts(watchedState, feed)),
+    watchedState.feeds.map((feed) => checkFeedForNewPosts(watchedState, feed)),
   )
 }
 
-const scheduleUpdates = watchedState => {
+const scheduleUpdates = (watchedState) => {
   const run = () => {
     checkAllFeeds(watchedState).finally(() => {
       setTimeout(run, UPDATE_INTERVAL_MS)
@@ -150,7 +150,7 @@ const getInitialLanguage = () => {
   return DEFAULT_LANG
 }
 
-const setLangInUrl = lang => {
+const setLangInUrl = (lang) => {
   const url = new URL(globalThis.location.href)
   url.searchParams.set(LANG_QUERY_PARAM, lang)
   globalThis.history.replaceState({}, '', url)
@@ -172,7 +172,7 @@ const showPostModal = (post, elements) => {
   document.body.classList.add('modal-open')
 }
 
-const hidePostModal = elements => {
+const hidePostModal = (elements) => {
   if (!elements.postModal || !elements.postModalBackdrop) {
     return
   }
@@ -188,7 +188,7 @@ const updateLangButtons = () => {
   const langButtons = document.querySelectorAll(LANG_BUTTON_SELECTOR)
   const currentLang = i18next.language
 
-  langButtons.forEach(button => {
+  langButtons.forEach((button) => {
     const { lang } = button.dataset
     const isActive = lang === currentLang
 
@@ -197,7 +197,7 @@ const updateLangButtons = () => {
   })
 }
 
-const applyTranslations = watchedState => {
+const applyTranslations = (watchedState) => {
   const {
     title,
     label,
@@ -256,7 +256,7 @@ const runApp = () => {
 
   applyTranslations(watchedState)
 
-  langButtons.forEach(button => {
+  langButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const { lang } = button.dataset
 
@@ -268,7 +268,7 @@ const runApp = () => {
     })
   })
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', (event) => {
     event.preventDefault()
 
     const url = input.value.trim()
@@ -277,7 +277,7 @@ const runApp = () => {
     watchedState.form.status = 'validating'
 
     const existingUrls = [
-      ...watchedState.feeds.map(feed => feed.url),
+      ...watchedState.feeds.map((feed) => feed.url),
       watchedState.form.pendingUrl,
     ].filter(Boolean)
 
@@ -294,7 +294,7 @@ const runApp = () => {
 
         return fetchFeed(url)
       })
-      .then(xmlString => {
+      .then((xmlString) => {
         const { feed, items } = parseRss(xmlString)
         const feedId = generateId()
 
@@ -305,7 +305,7 @@ const runApp = () => {
           description: feed.description,
         })
 
-        items.forEach(item => {
+        items.forEach((item) => {
           watchedState.posts.push({
             id: generateId(),
             feedId,
@@ -318,7 +318,7 @@ const runApp = () => {
         watchedState.form.status = 'success'
         watchedState.form.pendingUrl = null
       })
-      .catch(error => {
+      .catch((error) => {
         watchedState.form.pendingUrl = null
         const errorKey = error.name === 'ValidationError'
           ? error.message
@@ -331,11 +331,11 @@ const runApp = () => {
   })
 
   if (elements.postsList) {
-    elements.postsList.addEventListener('click', e => {
+    elements.postsList.addEventListener('click', (e) => {
       const btn = e.target.closest('.post-preview-btn')
       if (!btn) return
       const postId = btn.dataset.postId
-      const post = watchedState.posts.find(p => p.id === postId)
+      const post = watchedState.posts.find((p) => p.id === postId)
       if (post) {
         showPostModal(post, elements)
         watchedState.readPostIds.push(postId)
@@ -343,7 +343,7 @@ const runApp = () => {
     })
   }
 
-  document.querySelectorAll('.post-modal-close').forEach(el => {
+  document.querySelectorAll('.post-modal-close').forEach((el) => {
     el.addEventListener('click', () => hidePostModal(elements))
   })
 
@@ -359,4 +359,3 @@ i18next
     },
   })
   .then(runApp)
-
