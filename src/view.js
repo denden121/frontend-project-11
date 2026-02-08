@@ -100,16 +100,13 @@ const renderPosts = (container, posts, readPostIds = []) => {
   const items = posts.map((post) => {
     const li = document.createElement('li');
     li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    const wrap = document.createElement('div');
-    wrap.className = 'flex-grow-1 me-2';
     const a = document.createElement('a');
     a.href = post.link;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
-    a.className = readSet.has(post.id) ? 'fw-normal' : 'fw-bold';
+    a.className = `flex-grow-1 me-2 ${readSet.has(post.id) ? 'fw-normal' : 'fw-bold'}`;
     a.textContent = post.title || post.link;
-    wrap.appendChild(a);
-    li.appendChild(wrap);
+    li.appendChild(a);
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'btn btn-outline-primary btn-sm post-preview-btn';
