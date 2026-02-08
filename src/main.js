@@ -38,6 +38,7 @@ const state = {
   form: {
     status: 'idle',
     error: null,
+    pendingUrl: null,
   },
   feeds: [],
   posts: [],
@@ -276,12 +277,15 @@ const runApp = () => {
     watchedState.form.error = null;
     watchedState.form.status = 'validating';
 
-    validateUrl(
-      url,
-      watchedState.feeds.map((feed) => feed.url),
-    )
+    const existingUrls = [
+      ...watchedState.feeds.map((feed) => feed.url),
+      watchedState.form.pendingUrl,
+    ].filter(Boolean);
+
+    validateUrl(url, existingUrls)
       .then(() => {
         watchedState.form.status = 'loading';
+        watchedState.form.pendingUrl = url;
 
         return fetchFeed(url);
       })
@@ -307,8 +311,10 @@ const runApp = () => {
         });
 
         watchedState.form.status = 'success';
+        watchedState.form.pendingUrl = null;
       })
       .catch((error) => {
+        watchedState.form.pendingUrl = null;
         if (error.name === 'ValidationError') {
           watchedState.form.error = error.message;
         } else if (error.message === 'parse') {
