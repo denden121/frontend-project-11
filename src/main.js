@@ -44,7 +44,7 @@ const state = {
   readPostIds: [],
 };
 
-const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+const generateId = () => crypto.randomUUID();
 
 const stripHtml = (html) => {
   let text = '';
