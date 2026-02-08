@@ -32,7 +32,7 @@ const resources = {
       close: 'Закрыть',
     },
   },
-};
-export default resources;
+}
+export default resources
 
 
