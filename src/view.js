@@ -36,23 +36,42 @@ const renderFormState = (elements, state) => {
     input.classList.remove('is-valid');
     input.classList.add('is-invalid');
     feedback.textContent = getErrorMessage(form.error);
-    if (successFeedback) successFeedback.textContent = '';
+    feedback.style.display = 'block';
+    if (successFeedback) {
+      successFeedback.textContent = '';
+      successFeedback.className = 'valid-feedback rss-success';
+      successFeedback.style.display = 'none';
+    }
     return;
   }
 
   input.classList.remove('is-invalid');
+  input.classList.remove('is-valid');
   feedback.textContent = '';
+  feedback.style.display = '';
+  if (successFeedback) {
+    successFeedback.textContent = '';
+    successFeedback.style.display = '';
+  }
 
   if (form.status === 'success') {
     input.classList.add('is-valid');
-    if (successFeedback) successFeedback.textContent = i18next.t('form.success');
+    if (successFeedback) {
+      successFeedback.textContent = i18next.t('form.success');
+      successFeedback.className = 'valid-feedback rss-success';
+      successFeedback.style.display = '';
+    }
     input.value = '';
     input.focus();
     return;
   }
 
   input.classList.remove('is-valid');
-  if (successFeedback) successFeedback.textContent = '';
+  if (successFeedback) {
+    successFeedback.textContent = '';
+    successFeedback.className = 'valid-feedback rss-success';
+    successFeedback.style.display = '';
+  }
 };
 
 const renderFeeds = (container, feeds) => {
@@ -104,7 +123,7 @@ const renderPosts = (container, posts, readPostIds = []) => {
     a.href = post.link;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
-    a.className = `flex-grow-1 me-2 ${readSet.has(post.id) ? 'fw-normal' : 'fw-bold'}`;
+    a.className = readSet.has(post.id) ? 'fw-normal' : 'fw-bold';
     a.textContent = post.title || post.link;
     li.appendChild(a);
     const btn = document.createElement('button');

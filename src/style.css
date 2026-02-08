@@ -57,3 +57,8 @@ body {
   max-height: 70vh;
   overflow-y: auto;
 }
+
+.rss-posts-list li a {
+  flex: 1 1 auto;
+  margin-right: 0.5rem;
+}

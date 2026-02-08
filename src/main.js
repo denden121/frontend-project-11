@@ -282,6 +282,12 @@ const runApp = () => {
       watchedState.form.pendingUrl,
     ].filter(Boolean);
 
+    if (existingUrls.includes(url)) {
+      watchedState.form.status = 'error';
+      watchedState.form.error = 'errors.duplicate';
+      return;
+    }
+
     validateUrl(url, existingUrls)
       .then(() => {
         watchedState.form.status = 'loading';
@@ -315,14 +321,13 @@ const runApp = () => {
       })
       .catch((error) => {
         watchedState.form.pendingUrl = null;
-        if (error.name === 'ValidationError') {
-          watchedState.form.error = error.message;
-        } else if (error.message === 'parse') {
-          watchedState.form.error = 'errors.parse';
-        } else {
-          watchedState.form.error = 'errors.network';
-        }
+        const errorKey = error.name === 'ValidationError'
+          ? error.message
+          : error.message === 'parse'
+            ? 'errors.parse'
+            : 'errors.network';
         watchedState.form.status = 'error';
+        watchedState.form.error = errorKey;
       });
   });
 
