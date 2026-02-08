@@ -309,7 +309,9 @@ const runApp = () => {
         watchedState.form.status = 'success';
       })
       .catch((error) => {
-        if (error.message === 'parse') {
+        if (error.name === 'ValidationError') {
+          watchedState.form.error = error.message;
+        } else if (error.message === 'parse') {
           watchedState.form.error = 'errors.parse';
         } else {
           watchedState.form.error = 'errors.network';
